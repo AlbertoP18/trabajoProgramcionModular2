@@ -66,8 +66,7 @@ public class PerezYDussan {
         double MayorPorCiudad[] = new double[nCiudades];
         double MenorPorCiudad[] = new double[nCiudades];
 
-        //Cantidad de ventas
-        int CantidadVentas = nMarcas * nCiudades;
+    
 
         //Variables acumuladoras
         double TotalVentas = 0;
@@ -105,7 +104,7 @@ public class PerezYDussan {
 
         for (int i = 0; i < nCiudades; i++) {
             if (AcuPorCiudad[i] > 5000000) {
-                CiudadesMayoresA5m[i] = String.valueOf(AcuPo2rCiudad[i]);
+                CiudadesMayoresA5m[i] = String.valueOf(AcuPorCiudad[i]);
                 CantidadMayorA5m++;
 
             } else {
@@ -140,11 +139,11 @@ public class PerezYDussan {
         }
 
         for (int i = 0; i < nCiudades; i++) {
-            menAcuCiudad += "| " + AcuPorCiudad[i] + " |";
+            menAcuCiudad += "| " + vCiudades[i] +" " + AcuPorCiudad[i] + " |";
         }
 
         for (int i = 0; i < nMarcas; i++) {
-            menAcuMarca += "| " + AcuPorMarca[i] + " |";
+            menAcuMarca += "| " +vMarcas[i]+ " " + AcuPorMarca[i] + " |";
         }
 
         for (int i = 0; i < nCiudades; i++) {
@@ -156,7 +155,7 @@ public class PerezYDussan {
 
         for (int i = 0; i < nCiudades; i++) {
 
-            menMayora5M += "| " + CiudadesMayoresA5m[i] + " |";
+            menMayora5M += "| " + vCiudades[i] + " " + CiudadesMayoresA5m[i] + " |";
         }
 
         System.out.println(menVMarca + "\n");
@@ -173,8 +172,44 @@ public class PerezYDussan {
 
         System.out.println(menMenorCiudad + "\n");
 
-        System.out.println(menMayora5M);
+        System.out.println(menMayora5M+ "\n");
+        
+        
+        
+        
+// matriz con el metodo de burbuja   
 
-    }
+     
+        
+       for (int i = 0; i < nMarcas; i++) {
+            for (int j = 0; j < nCiudades; j++) {
+                for (int k = 0; k < nMarcas; k++) {
+                    for (int l = 0; l < nCiudades; l++) {
+                        if(ventas[i][j]>=ventas[k][l]){
+                            ventas[i][j] = ventas[i][j];
+                        }else{
+                            double temp = ventas[k][l];
+                            ventas[k][l]=ventas[i][j];
+                            ventas[i][j]=temp;
+                        }
+                    }
+                }
+            }
+        }
+        
+         String menMatrizOrdenada = "La  Matriz de las ventas ORDENADAS con metodo burbuja: \n";
+         
+         
+        
+         for (int i = 0; i < nMarcas; i++) {
+            menMatrizOrdenada += "\n";
+            for (int j = 0; j < nCiudades; j++) {
+                menMatrizOrdenada += "| " + ventas[i][j] + " |";
+            }
+        }
+         System.out.println(menMatrizOrdenada);
+        
+        
+ }
 
 }
