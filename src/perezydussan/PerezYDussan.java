@@ -1,5 +1,7 @@
 package perezydussan;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class PerezYDussan {
@@ -25,13 +27,14 @@ public class PerezYDussan {
         return Menor;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Scanner input = new Scanner(System.in);
+        FileWriter fichero = new FileWriter("ventasComputadores.txt");
 
         int nMarcas;
         int nCiudades;
-        double valorVentas = 0;
+        
 
         System.out.println("cuantas marcas de computadores ");
         nMarcas = input.nextInt();
@@ -51,9 +54,14 @@ public class PerezYDussan {
             System.out.println("Digite el nombre de la cuidad");
             vCiudades[i] = input.next();
         }
-
+        
+        ///////////////variables
+        double promGeneral=0;
+        double[] promCiudades = new double[nCiudades];
+        double[] promMarcas = new double[nMarcas];
+        
         //Vector que tambien contendra todos los datos
-        double VectorDatos[] = new double[nMarcas * nCiudades];
+        double tamañoMatriz = nMarcas * nCiudades;
 
         //Acumulados por marca y ciudad
         double AcuPorMarca[] = new double[nMarcas];
@@ -65,8 +73,6 @@ public class PerezYDussan {
         //Mayor y menor por ciudad
         double MayorPorCiudad[] = new double[nCiudades];
         double MenorPorCiudad[] = new double[nCiudades];
-
-    
 
         //Variables acumuladoras
         double TotalVentas = 0;
@@ -93,7 +99,8 @@ public class PerezYDussan {
             for (int j = 0; j < nCiudades; j++) {
                 AcumuladoMarca += ventas[i][j];
                 AcuPorCiudad[j] += ventas[i][j];
-                VentasCiudad[j] = ventas[i][j];
+                VentasCiudad[j] = ventas[j][i];
+                TotalVentas += ventas[i][j];
             }
 
             AcuPorMarca[i] = AcumuladoMarca;
@@ -111,16 +118,28 @@ public class PerezYDussan {
                 CiudadesMayoresA5m[i] = "No es mayor a 5M";
             }
         }
+        ////promedio general
+        promGeneral = TotalVentas/tamañoMatriz;
+        
+        ////////promedio por marcas y ciudades
+        for (int i = 0; i < nMarcas; i++) {
+            promMarcas[i] = AcuPorMarca[i]/nCiudades;
+            promCiudades[i] = AcuPorCiudad[i]/nMarcas;
+        }
+        
 
         /////mostrar datos
-        String menMatriz = "La  Matriz de las ventas: \n";
+        String menMatriz = "La  Matriz de las ventas: ";
         String menVMarca = "Las marcas son: \n";
         String MenVCiudades = "Las ciudades son: \n";
-        String menAcuCiudad = "el acumulado por ciudades es: \n";
-        String menAcuMarca = "el acumulado por Marca es: \n";
-        String menMayorCiudad = "las venta mas alta por ciudad es: \n";
-        String menMenorCiudad = "las venta mas baja por ciudad es: \n";
-        String menMayora5M = "las venta Mayores a 5 Millones son: \n";
+        String menAcuCiudad = "El acumulado por ciudades es: \n";
+        String menAcuMarca = "El acumulado por Marca es: \n";
+        String menMayorCiudad = "Las venta mas alta por ciudad es: \n";
+        String menMenorCiudad = "Las venta mas baja por ciudad es: \n";
+        String menMayora5M = "Las venta Mayores a 5 Millones son: \n";
+        String menPromMarca = "Los promedios por marcas son: \n";
+        String menPromCiudad = "Los promedios por ciudades son: \n";
+        String menMatrizOrdenada = "La  Matriz de las ventas ordenada con metodo burbuja: ";
 
         for (int i = 0; i < nMarcas; i++) {
             menVMarca += "| " + vMarcas[i] + " |";
@@ -139,17 +158,17 @@ public class PerezYDussan {
         }
 
         for (int i = 0; i < nCiudades; i++) {
-            menAcuCiudad += "| " + vCiudades[i] +" " + AcuPorCiudad[i] + " |";
+            menAcuCiudad += "| " + vCiudades[i] + " " + AcuPorCiudad[i] + " |";
         }
 
         for (int i = 0; i < nMarcas; i++) {
-            menAcuMarca += "| " +vMarcas[i]+ " " + AcuPorMarca[i] + " |";
+            menAcuMarca += "| " + vMarcas[i] + " " + AcuPorMarca[i] + " |";
         }
 
         for (int i = 0; i < nCiudades; i++) {
 
-            menMayorCiudad += "| " + MayorPorCiudad[i] + " |";
-            menMenorCiudad += "| " + MenorPorCiudad[i] + " |";
+            menMayorCiudad += "| " + vCiudades[i] + "  " + MayorPorCiudad[i] + " |";
+            menMenorCiudad += "| " + vCiudades[i] + "  " + MenorPorCiudad[i] + " |";
 
         }
 
@@ -157,6 +176,14 @@ public class PerezYDussan {
 
             menMayora5M += "| " + vCiudades[i] + " " + CiudadesMayoresA5m[i] + " |";
         }
+        for (int i = 0; i < nMarcas; i++) {
+            menPromMarca += " | "+ vMarcas[i]+ "  "+ promMarcas[i]+" | ";
+        }
+        for (int i = 0; i < nCiudades; i++) {
+            menPromCiudad += " | "+ vCiudades[i]+ "  "+ promCiudades[i]+" | ";
+        }
+        
+        
 
         System.out.println(menVMarca + "\n");
 
@@ -171,45 +198,88 @@ public class PerezYDussan {
         System.out.println(menMayorCiudad + "\n");
 
         System.out.println(menMenorCiudad + "\n");
+        
+        System.out.println(menMayora5M + "\n");
+        
+        System.out.println(menPromCiudad +"\n");
+        
+        System.out.println(menPromMarca +"\n");
+        
+        System.out.println("El total de ventas en Pesos Colombianos es : \n"
+                + TotalVentas+"\n"
+                        + "El total de ventas en Dolares es: \n"
+                        + TotalVentas/4213+"\n"
+                        + "El total de ventas en Euros es: \n"
+                        + TotalVentas/4462+"\n");
+        
+        
+        System.out.println("El promedio general de la ventas es : \n"
+                + promGeneral+"\n");
+        
 
-        System.out.println(menMayora5M+ "\n");
-        
-        
-        
-        
 // matriz con el metodo de burbuja   
-
-     
-        
-       for (int i = 0; i < nMarcas; i++) {
+        for (int i = 0; i < nMarcas; i++) {
             for (int j = 0; j < nCiudades; j++) {
                 for (int k = 0; k < nMarcas; k++) {
                     for (int l = 0; l < nCiudades; l++) {
-                        if(ventas[i][j]>=ventas[k][l]){
+                        if (ventas[i][j] >= ventas[k][l]) {
                             ventas[i][j] = ventas[i][j];
-                        }else{
+                        } else {
                             double temp = ventas[k][l];
-                            ventas[k][l]=ventas[i][j];
-                            ventas[i][j]=temp;
+                            ventas[k][l] = ventas[i][j];
+                            ventas[i][j] = temp;
                         }
                     }
                 }
             }
         }
-        
-         String menMatrizOrdenada = "La  Matriz de las ventas ORDENADAS con metodo burbuja: \n";
-         
-         
-        
-         for (int i = 0; i < nMarcas; i++) {
+
+
+
+        for (int i = 0; i < nMarcas; i++) {
             menMatrizOrdenada += "\n";
             for (int j = 0; j < nCiudades; j++) {
                 menMatrizOrdenada += "| " + ventas[i][j] + " |";
             }
         }
-         System.out.println(menMatrizOrdenada);
+        System.out.println(menMatrizOrdenada);
         
         
- }
+       ////////////////////// Guardado en txt 
+       
+        fichero.write(menVMarca + "\n");
+
+        fichero.write(MenVCiudades + "\n");
+
+        fichero.write(menMatriz + "\n");
+
+        fichero.write(menAcuMarca + "\n");
+
+        fichero.write(menAcuCiudad + "\n");
+
+        fichero.write(menMayorCiudad + "\n");
+
+        fichero.write(menMenorCiudad + "\n");
+        
+        fichero.write(menMayora5M + "\n");
+        
+        fichero.write(menPromCiudad +"\n");
+        
+        fichero.write(menPromMarca +"\n");
+        
+        fichero.write("El total de ventas en Pesos Colombianos es : \n" + TotalVentas + "\n" + "El total de ventas en Dolares es: \n" + TotalVentas / 4213 + "\n"
+                + "El total de ventas en Euros es: \n" + TotalVentas/4462+"\n");
+        
+        
+        fichero.write("El promedio general de la ventas es : \n" + promGeneral+ "\n");
+        
+        
+        
+        fichero.write(menMatrizOrdenada);
+
+        
+        fichero.close();
+        
+    }
 
 }
