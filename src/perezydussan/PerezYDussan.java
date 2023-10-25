@@ -93,20 +93,29 @@ public class PerezYDussan {
         ////////operaciones 
         for (int i = 0; i < nMarcas; i++) {
             double AcumuladoMarca = 0;
-            double VentasCiudad[] = new double[nCiudades];
+            
 
             //Recorremos la fila
             for (int j = 0; j < nCiudades; j++) {
                 AcumuladoMarca += ventas[i][j];
-                AcuPorCiudad[j] += ventas[i][j];
-                VentasCiudad[j] = ventas[j][i];
                 TotalVentas += ventas[i][j];
             }
 
             AcuPorMarca[i] = AcumuladoMarca;
 
-            MayorPorCiudad[i] = ObtenerMayor(VentasCiudad);
-            MenorPorCiudad[i] = ObtenerMenor(VentasCiudad);
+
+        }
+        
+        //////////recorremos columnas
+        for (int j = 0; j < nCiudades; j++) { // Itera a través de las columnas
+            double VentasCiudad[] = new double[nCiudades];
+            for (int i = 0; i < nMarcas; i++) { // Itera a través de las filas
+                AcuPorCiudad[j] += ventas[i][j];
+                VentasCiudad[j] = ventas[i][j];
+            }
+            
+                MayorPorCiudad[j] = ObtenerMayor(VentasCiudad);
+                MenorPorCiudad[j] = ObtenerMenor(VentasCiudad);
         }
 
         for (int i = 0; i < nCiudades; i++) {
@@ -124,6 +133,9 @@ public class PerezYDussan {
         ////////promedio por marcas y ciudades
         for (int i = 0; i < nMarcas; i++) {
             promMarcas[i] = AcuPorMarca[i]/nCiudades;
+        }
+        
+        for (int i = 0; i < nCiudades; i++) {
             promCiudades[i] = AcuPorCiudad[i]/nMarcas;
         }
         
